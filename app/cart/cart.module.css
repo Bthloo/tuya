@@ -1,0 +1,280 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+@media (min-width: 992px) {
+  .layout {
+    grid-template-columns: 1fr 360px;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto auto auto;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: #fff;
+}
+
+.rowImage {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.rowInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rowName {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.rowName:hover {
+  color: var(--accent);
+}
+
+.rowPrice {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.rowTotal {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.remove {
+  background: none;
+  border: none;
+  color: #dc3545; 
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: opacity 0.2s;
+}
+
+.remove:hover {
+  opacity: 0.8;
+}
+
+.qtyControl {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.qtyControl button {
+  background: var(--surface);
+  border: none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.qtyControl button:hover {
+  background: var(--border);
+}
+
+.qtyControl span {
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.summary {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  align-self: start;
+  position: sticky;
+  top: 84px;
+  background: #fff;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: var(--muted);
+}
+
+.summaryTotal {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 6px;
+  margin-bottom: 18px;
+}
+
+.checkoutForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.formTitle {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.paymentOptions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.paymentBtn,
+.paymentActive {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.paymentActive {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+}
+
+.imagePreviewWrap {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+
+.uploadBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.2s;
+}
+
+.uploadBtn:hover {
+  background: var(--border);
+}
+
+.hiddenFileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: 64px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+  .rowTotal {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+  }
+  .qtyControl {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+  }
+  .remove {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: end;
+  }
+}

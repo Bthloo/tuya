@@ -1,0 +1,28 @@
+{
+  "name": "sweetshop",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.3.0",
+    "@fortawesome/fontawesome-svg-core": "^7.3.0",
+    "@fortawesome/free-brands-svg-icons": "^7.3.0",
+    "@fortawesome/free-regular-svg-icons": "^7.3.0",
+    "@fortawesome/free-solid-svg-icons": "^7.3.0",
+    "@fortawesome/react-fontawesome": "^3.3.1",
+    "lucide-react": "^1.22.0",
+    "next": "15.5.19",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
+  }
+}

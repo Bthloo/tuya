@@ -1,0 +1,116 @@
+.outer {
+  padding-top: 20px;
+}
+
+.wrap {
+  position: relative;
+  transition: background 0.3s ease;
+  touch-action: pan-y;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow:hover {
+  background: var(--surface);
+}
+
+.arrowLeft {
+  left: 10px;
+}
+
+.arrowRight {
+  right: 10px;
+}
+
+@media (min-width: 640px) {
+  .arrow {
+    width: 42px;
+    height: 42px;
+  }
+  .arrowLeft {
+    left: 18px;
+  }
+  .arrowRight {
+    right: 18px;
+  }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 20px;
+  padding: 56px 20px 64px;
+  min-height: 260px;
+}
+
+.text {
+  max-width: 480px;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.sub {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0 0 22px;
+}
+
+.emoji {
+  font-size: 96px;
+  line-height: 1;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .emoji {
+    display: block;
+  }
+}
+
+.dots {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot,
+.dotActive {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(38, 34, 32, 0.25);
+  padding: 0;
+}
+
+.dotActive {
+  background: var(--accent);
+  width: 20px;
+  border-radius: 4px;
+}
