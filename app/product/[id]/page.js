@@ -1,27 +1,47 @@
 "use client";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useParams, notFound } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useLanguage } from "../../../context/LanguageContext";
 import { useCart } from "../../../context/CartContext";
 import { getProductById } from "../../../data/products";
+import { supabase } from "../../../lib/supabase";
 import styles from "./product.module.css";
-
-
 
 export default function ProductPage() {
   const { id } = useParams();
   const { lang, t } = useLanguage();
   const { addToCart } = useCart();
-  const product = getProductById(id);
+
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
 
+  useEffect(() => {
+    async function loadProduct() {
+      try {
+        const data = await getProductById(id);
+        setProduct(data);
+      } catch (err) {
+        console.error(err);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProduct();
+  }, [id]);
 
+  if (loading) {
+    return (
+      <div className="container" style={{ padding: "60px 0" }}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
-  
   if (!product) {
     return (
       <div className="container" style={{ padding: "60px 0" }}>
@@ -36,13 +56,25 @@ export default function ProductPage() {
     setTimeout(() => setAdded(false), 1800);
   }
 
+  const imageUrls =
+    product.images?.length > 0
+      ? product.images
+          .sort((a, b) => a.sort_order - b.sort_order)
+          .map(
+            (img) =>
+              supabase.storage
+                .from("product-images")
+                .getPublicUrl(img.storage_path).data.publicUrl
+          )
+      : ["https://placehold.co/800x800/F7F3EE/262220?font=montserrat&text=No+Image"];
+
   return (
     <div className="container" style={{ paddingTop: 40, paddingBottom: 60 }}>
       <div className={styles.grid}>
         <div>
           <div className={styles.mainImage}>
             <Image
-              src={product.images[activeImg]}
+              src={imageUrls[activeImg]}
               alt={product.name[lang]}
               fill
               sizes="(max-width: 700px) 100vw, 460px"
@@ -51,7 +83,7 @@ export default function ProductPage() {
             />
           </div>
           <div className={styles.thumbs}>
-            {product.images.map((img, i) => (
+            {imageUrls.map((img, i) => (
               <button
                 key={i}
                 className={i === activeImg ? styles.thumbActive : styles.thumb}
@@ -71,9 +103,9 @@ export default function ProductPage() {
             <span className={styles.price}>
               {product.price} {t.common.currency}
             </span>
-            {product.oldPrice && (
+            {product.old_price && (
               <span className={styles.oldPrice}>
-                {product.oldPrice} {t.common.currency}
+                {product.old_price} {t.common.currency}
               </span>
             )}
           </div>

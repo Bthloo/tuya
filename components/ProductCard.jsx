@@ -3,22 +3,30 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "../context/LanguageContext";
+import { supabase } from "../lib/supabase";
 import styles from "./ProductCard.module.css";
 
 export default function ProductCard({ product }) {
   const { lang, t } = useLanguage();
 
+  const imageUrl =
+    product.images?.length > 0
+      ? supabase.storage
+          .from("product-images")
+          .getPublicUrl(product.images[0].storage_path).data.publicUrl
+      : "https://placehold.co/400x400/F7F3EE/262220?font=montserrat&text=No+Image";
+
   return (
     <Link href={`/product/${product.id}`} className={styles.card}>
       <div className={styles.imageContainer}>
-        {product.oldPrice && (
+        {product.old_price && (
           <span className={styles.discountBadge}>
-            -{Math.round(100 - (product.price / product.oldPrice) * 100)}%
+            -{Math.round(100 - (product.price / product.old_price) * 100)}%
           </span>
         )}
 
         <Image
-          src={product.images[0]}
+          src={imageUrl}
           alt={product.name[lang]}
           fill
           className={styles.image}
@@ -34,9 +42,9 @@ export default function ProductCard({ product }) {
             {product.price} {t.common.currency}
           </span>
 
-          {product.oldPrice && (
+          {product.old_price && (
             <span className={styles.oldPrice}>
-              {product.oldPrice} {t.common.currency}
+              {product.old_price} {t.common.currency}
             </span>
           )}
         </div>

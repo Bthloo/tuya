@@ -1,7 +1,18 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 
 const CartContext = createContext(null);
+
+const PLACEHOLDER_IMG =
+  "https://placehold.co/400x400/F7F3EE/262220?font=montserrat&text=No+Image";
+
+function getProductImageUrl(product) {
+  if (!product.images?.length) return PLACEHOLDER_IMG;
+  return supabase.storage
+    .from("product-images")
+    .getPublicUrl(product.images[0].storage_path).data.publicUrl;
+}
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([]);
@@ -37,7 +48,7 @@ export function CartProvider({ children }) {
           id: product.id,
           name: product.name,
           price: product.price,
-          image: product.images[0],
+          image: getProductImageUrl(product),
           qty,
         },
       ];
