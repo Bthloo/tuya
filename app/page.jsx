@@ -1,30 +1,32 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
-import { categories, getAllProductsGrouped } from "../data/products";
-import HeroSlider from "../components/HeroSlider";
+import { getCategoriesWithProducts, getBestSellers } from "../data/products";
 import ProductCard from "../components/ProductCard";
 import Hero from "../components/Hero";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUp } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomePage() {
-  const { t } = useLanguage();
-  const [grouped, setGrouped] = useState({});
+  const { lang } = useLanguage();
+  const [categoriesData, setCategoriesData] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadProducts() {
+    async function loadData() {
       try {
-        const data = await getAllProductsGrouped();
-        setGrouped(data);
+        const [cats, best] = await Promise.all([
+          getCategoriesWithProducts(),
+          getBestSellers(),
+        ]);
+        setCategoriesData(cats);
+        setBestSellers(best);
       } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);
       }
     }
-    loadProducts();
+    loadData();
   }, []);
 
   if (loading) {
@@ -43,12 +45,30 @@ export default function HomePage() {
         id="categories"
         style={{ scrollMarginTop: 60, paddingTop: 40, paddingBottom: 40 }}
       >
-        {categories.map((cat) => {
-          const items = grouped[cat] || [];
-          if (!items.length) return null;
+        {bestSellers.length > 0 && (
+          <section style={{ marginBottom: 44 }}>
+            <h2 className="section-title">
+              {lang === "tr" ? "Çok Satanlar" : "Best Sellers"}
+            </h2>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+                gap: 18,
+              }}
+            >
+              {bestSellers.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {categoriesData.map((cat) => {
+          if (!cat.products.length) return null;
           return (
-            <section key={cat} style={{ marginBottom: 44 }}>
-              <h2 className="section-title">{t.categories[cat]}</h2>
+            <section key={cat.slug} style={{ marginBottom: 44 }}>
+              <h2 className="section-title">{cat.name[lang]}</h2>
               <div
                 style={{
                   display: "grid",
@@ -56,7 +76,7 @@ export default function HomePage() {
                   gap: 18,
                 }}
               >
-                {items.map((p) => (
+                {cat.products.map((p) => (
                   <ProductCard key={p.id} product={p} />
                 ))}
               </div>

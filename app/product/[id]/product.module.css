@@ -82,6 +82,7 @@
   color: var(--text);
   margin: 0 0 26px;
   line-height: 1.6;
+  white-space: pre-line;
 }
 
 .qtyRow {
