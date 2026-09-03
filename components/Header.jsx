@@ -13,7 +13,6 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-
   useEffect(() => {
     const sections = ["home", "categories", "about", "contact"];
 
@@ -44,21 +43,36 @@ export default function Header() {
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
+  const LangSwitch = () => (
+    <div className={styles.langSwitch} role="group" aria-label="Language">
+      <button
+        className={lang === "en" ? styles.langActive : styles.langBtn}
+        onClick={() => setLang("en")}
+      >
+        EN
+      </button>
+      <button
+        className={lang === "tr" ? styles.langActive : styles.langBtn}
+        onClick={() => setLang("tr")}
+      >
+        TR
+      </button>
+    </div>
+  );
+
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-
-       <Link href="/" className={styles.logoLink} onClick={closeMenu}>
-         <Image
-           src="/logo.jpg"
-           alt={t.siteName}
-           width={36}
-           height={36}
-           className={styles.logoImg}
-         />
-         <span className={styles.logo}>{t.siteName}</span>
-       </Link>
-
+        <Link href="/" className={styles.logoLink} onClick={closeMenu}>
+          <Image
+            src="/logo.jpg"
+            alt={t.siteName}
+            width={36}
+            height={36}
+            className={styles.logoImg}
+          />
+          <span className={styles.logo}>{t.siteName}</span>
+        </Link>
 
         {!isOpen && (
           <button
@@ -70,9 +84,7 @@ export default function Header() {
           </button>
         )}
 
-
         <nav className={`${styles.nav} ${isOpen ? styles.navOpen : ""}`}>
-
           <button
             className={styles.closeBtn}
             onClick={closeMenu}
@@ -109,34 +121,23 @@ export default function Header() {
           >
             {t.nav.contact}
           </Link>
+
+
+          <div className={styles.navLangWrap}>
+            <LangSwitch />
+          </div>
         </nav>
 
-
         <div className={styles.actions}>
-          <div className={styles.langSwitch} role="group" aria-label="Language">
-            <button
-              className={lang === "en" ? styles.langActive : styles.langBtn}
-              onClick={() => setLang("en")}
-            >
-              EN
-            </button>
-            <button
-              className={lang === "tr" ? styles.langActive : styles.langBtn}
-              onClick={() => setLang("tr")}
-            >
-              TR
-            </button>
+
+          <div className={styles.desktopLangWrap}>
+            <LangSwitch />
           </div>
 
           <Link href="/cart" className={styles.cartLink} aria-label={t.nav.cart}>
- <i className="fa-solid fa-cart-shopping"></i>
-
-  {count > 0 && (
-    <span className={styles.cartCount}>
-      {count}
-    </span>
-  )}
-</Link>
+            <i className="fa-solid fa-cart-shopping"></i>
+            {count > 0 && <span className={styles.cartCount}>{count}</span>}
+          </Link>
         </div>
       </div>
     </header>

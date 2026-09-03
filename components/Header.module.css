@@ -191,3 +191,22 @@
   justify-content: center;
   padding: 0 4px;
 }
+
+.navLangWrap {
+  margin-top: 10px;
+}
+
+
+.desktopLangWrap {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .navLangWrap {
+    display: none;
+  }
+
+  .desktopLangWrap {
+    display: block;
+  }
+}

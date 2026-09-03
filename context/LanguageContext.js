@@ -5,7 +5,7 @@ import { translations } from "../lib/translations";
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = useState("tr");
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("lang") : null;
