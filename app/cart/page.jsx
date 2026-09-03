@@ -6,10 +6,13 @@ import { useLanguage } from "../../context/LanguageContext.js";
 import { useCart } from "../../context/CartContext.js";
 import styles from "./cart.module.css";
 
+const DELIVERY_FEE = 150;
+const FREE_DELIVERY_THRESHOLD = 500000000;
 
-
-const DELIVERY_FEE = 25;
-const FREE_DELIVERY_THRESHOLD = 500;
+const paymentInfo = {
+  iban: "TR10 0001 5001 5800 7389 0374 24",
+  accountName: "RADWA ELKHAMISY",
+};
 
 const visaUploadText = {
   en: {
@@ -23,6 +26,25 @@ const visaUploadText = {
     hint: "Ödeme/transfer ekran görüntüsünü veya fotoğrafını yükleyin",
     chooseFile: "Görsel seç",
     change: "Görseli değiştir",
+  },
+};
+
+const paymentInfoText = {
+  en: {
+    title: "Payment Details",
+    hint: "Please transfer the total amount to the account below, then upload a screenshot as proof.",
+    iban: "IBAN",
+    name: "Account Name",
+    copied: "Copied!",
+    copy: "Copy",
+  },
+  tr: {
+    title: "Ödeme Bilgileri",
+    hint: "Lütfen toplam tutarı aşağıdaki hesaba transfer edin, ardından kanıt olarak ekran görüntüsü yükleyin.",
+    iban: "IBAN",
+    name: "Hesap Adı",
+    copied: "Kopyalandı!",
+    copy: "Kopyala",
   },
 };
 
@@ -40,9 +62,9 @@ export default function CartPage() {
   });
   const [paymentImage, setPaymentImage] = useState(null);
   const [paymentImagePreview, setPaymentImagePreview] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    
     return () => {
       if (paymentImagePreview) {
         URL.revokeObjectURL(paymentImagePreview);
@@ -51,6 +73,7 @@ export default function CartPage() {
   }, [paymentImagePreview]);
 
   const vt = visaUploadText[lang] || visaUploadText["en"];
+  const pt = paymentInfoText[lang] || paymentInfoText["en"];
 
   const delivery =
     items.length === 0
@@ -73,6 +96,12 @@ export default function CartPage() {
 
     setPaymentImage(file);
     setPaymentImagePreview(URL.createObjectURL(file));
+  }
+
+  function handleCopyIban() {
+    navigator.clipboard.writeText(paymentInfo.iban.replace(/\s/g, ""));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
   }
 
   function handleQtyMinus(item) {
@@ -268,6 +297,69 @@ export default function CartPage() {
                     value={form.notes}
                     onChange={handleChange}
                   />
+                </div>
+
+                <div className={styles.field}>
+                  <label className={styles.formTitle} style={{ marginBottom: 4 }}>
+                    🏦 {pt.title}
+                  </label>
+                  <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 10px" }}>
+                    {pt.hint}
+                  </p>
+
+                  <div
+                    style={{
+                      background: "var(--surface, #f7f3ee)",
+                      border: "1px solid var(--border, #e5ddd3)",
+                      borderRadius: 10,
+                      padding: "12px 14px",
+                      marginBottom: 4,
+                    }}
+                  >
+                    <div style={{ marginBottom: 8 }}>
+                      <span style={{ fontSize: 12, color: "var(--muted)" }}>
+                        {pt.iban}
+                      </span>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: 8,
+                        }}
+                      >
+                        <strong style={{ fontSize: 15, letterSpacing: 0.5 }}>
+                          {paymentInfo.iban}
+                        </strong>
+                        <button
+                          type="button"
+                          onClick={handleCopyIban}
+                          style={{
+                            fontSize: 12,
+                            padding: "4px 10px",
+                            borderRadius: 6,
+                            border: "1px solid var(--border, #ccc)",
+                            background: "#fff",
+                            cursor: "pointer",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {copied ? pt.copied : pt.copy}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <span style={{ fontSize: 12, color: "var(--muted)" }}>
+                        {pt.name}
+                      </span>
+                      <div>
+                        <strong style={{ fontSize: 15 }}>
+                          {paymentInfo.accountName}
+                        </strong>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles.field}>

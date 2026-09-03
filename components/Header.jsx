@@ -5,6 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useCart } from "../context/CartContext";
 import styles from "./Header.module.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Image from "next/image";
 
 export default function Header() {
   const { lang, setLang, t } = useLanguage();
@@ -15,7 +16,7 @@ export default function Header() {
 
   useEffect(() => {
     const sections = ["home", "categories", "about", "contact"];
-    
+
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 100;
 
@@ -46,56 +47,63 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-     
-        <Link href="/" className={styles.logo} onClick={closeMenu}>
-          {t.siteName}
-        </Link>
 
-   
+       <Link href="/" className={styles.logoLink} onClick={closeMenu}>
+         <Image
+           src="/logo.jpg"
+           alt={t.siteName}
+           width={36}
+           height={36}
+           className={styles.logoImg}
+         />
+         <span className={styles.logo}>{t.siteName}</span>
+       </Link>
+
+
         {!isOpen && (
-          <button 
-            className={styles.burgerBtn} 
-            onClick={toggleMenu} 
+          <button
+            className={styles.burgerBtn}
+            onClick={toggleMenu}
             aria-label="Open Menu"
           >
             <i className="fas fa-bars"></i>
           </button>
         )}
 
-       
+
         <nav className={`${styles.nav} ${isOpen ? styles.navOpen : ""}`}>
-       
-          <button 
-            className={styles.closeBtn} 
-            onClick={closeMenu} 
+
+          <button
+            className={styles.closeBtn}
+            onClick={closeMenu}
             aria-label="Close Menu"
           >
             <i className="fas fa-times"></i>
           </button>
 
-          <Link 
-            href="#home" 
+          <Link
+            href="#home"
             className={activeSection === "home" ? styles.linkActive : ""}
             onClick={closeMenu}
           >
             {t.nav.home}
           </Link>
-          <Link 
-            href="#categories" 
+          <Link
+            href="#categories"
             className={activeSection === "categories" ? styles.linkActive : ""}
             onClick={closeMenu}
           >
             {t.nav.products}
           </Link>
-          <Link 
-            href="#about" 
+          <Link
+            href="#about"
             className={activeSection === "about" ? styles.linkActive : ""}
             onClick={closeMenu}
           >
             {t.nav.about}
           </Link>
-          <Link 
-            href="#contact" 
+          <Link
+            href="#contact"
             className={activeSection === "contact" ? styles.linkActive : ""}
             onClick={closeMenu}
           >
@@ -103,7 +111,7 @@ export default function Header() {
           </Link>
         </nav>
 
-     
+
         <div className={styles.actions}>
           <div className={styles.langSwitch} role="group" aria-label="Language">
             <button

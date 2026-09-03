@@ -1,5 +1,5 @@
 .header {
-   border-bottom: 1px solid var(--border); 
+   border-bottom: 1px solid var(--border);
   background-color:  rgba(255, 255, 255, 0.784);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -26,6 +26,19 @@
   color: var(--accent);
 }
 
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logoImg {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 6px;
+}
 
 .burgerBtn {
   display: block;
@@ -34,7 +47,7 @@
   font-size: 24px;
   color: #333;
   cursor: pointer;
-  order: 2; 
+  order: 2;
   padding: 8px;
   z-index: 60;
 }
@@ -45,7 +58,7 @@
   border: none;
   font-size: 26px;
   color: #333;
-  align-self: flex-end; 
+  align-self: flex-end;
   cursor: pointer;
   padding: 10px;
   margin-bottom: 10px;
@@ -55,9 +68,9 @@
 .nav {
   display: flex;
   flex-direction: column;
-  position: fixed; 
+  position: fixed;
   top: 0;
-  right: -100%; 
+  right: -100%;
   width: 280px;
   height: 100vh;
   background: #fff;
@@ -70,7 +83,7 @@
 
 
 .navOpen {
-  right: 0; 
+  right: 0;
 }
 
 .nav a {
@@ -108,7 +121,7 @@
 
 @media (min-width: 720px) {
   .burgerBtn, .closeBtn {
-    display: none; 
+    display: none;
   }
 
   .actions {

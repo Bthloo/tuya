@@ -37,7 +37,7 @@ export default function Contact() {
 
           <div className="info-item">
             <i className="fa-solid fa-envelope"></i>
-            <span>info@sweetshop.com</span>
+            <span>tuyahomebakes@gmail.com</span>
           </div>
 
         </div>

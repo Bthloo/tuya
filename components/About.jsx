@@ -10,7 +10,7 @@ export default function About() {
     <section id="about" className="about">
       <div className="container about-container">
         <div className="about-image">
-          <img src="/images/about.jpg" alt="About Us" />
+          <img src="/logo.jpg" alt="About Us" />
         </div>
 
         <div className="about-content">
