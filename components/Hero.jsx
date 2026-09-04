@@ -1,42 +1,56 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import "./Hero.css";
 import { useLanguage } from "../context/LanguageContext";
 import { supabase } from "../lib/supabase";
 
-const FALLBACK_IMAGE =
-  "https://images.pexels.com/photos/18543481/pexels-photo-18543481.jpeg";
-
 function getDayIndex(count) {
   const start = new Date(new Date().getFullYear(), 0, 0);
   const diff = new Date() - start;
   const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
   return dayOfYear % count;
 }
 
 const Hero = () => {
   const { t, lang } = useLanguage();
-  const [heroImageUrl, setHeroImageUrl] = useState(FALLBACK_IMAGE);
+
+  const [heroImageUrl, setHeroImageUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadHeroImage() {
-      const { data, error } = await supabase.storage
-        .from("hero-images")
-        .list("", { limit: 100 });
+      try {
+        const { data, error } = await supabase.storage
+          .from("hero-images")
+          .list("", { limit: 100 });
 
-      if (error || !data || data.length === 0) return;
+        if (error || !data || data.length === 0) {
+          return;
+        }
 
-      const files = data.filter((f) => f.name && !f.name.startsWith("."));
-      if (files.length === 0) return;
+        const files = data.filter(
+          (f) => f.name && !f.name.startsWith(".")
+        );
 
-      const index = getDayIndex(files.length);
-      const chosen = files[index];
+        if (files.length === 0) {
+          return;
+        }
 
-      const { data: urlData } = supabase.storage
-        .from("hero-images")
-        .getPublicUrl(chosen.name);
+        const index = getDayIndex(files.length);
+        const chosen = files[index];
 
-      setHeroImageUrl(urlData.publicUrl);
+        const { data: urlData } = supabase.storage
+          .from("hero-images")
+          .getPublicUrl(chosen.name);
+
+        if (urlData?.publicUrl) {
+          setHeroImageUrl(urlData.publicUrl);
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     loadHeroImage();
@@ -51,8 +65,13 @@ const Hero = () => {
     <section id="home" className="hero">
       <div
         className="hero-bg-blur"
-        style={{ backgroundImage: `url('${heroImageUrl}')` }}
+        style={
+          heroImageUrl
+            ? { backgroundImage: `url('${heroImageUrl}')` }
+            : undefined
+        }
       />
+
       <div className="hero-overlay" />
 
       <div className="hero-container">
@@ -71,13 +90,28 @@ const Hero = () => {
             >
               {t.hero.shopNow}
             </button>
+
             <span className="hero-trust">{trustLine}</span>
           </div>
         </div>
 
         <div className="hero-image-wrapper">
           <div className="hero-image-card">
-            <img src={heroImageUrl} alt="" className="hero-img" />
+            {isLoading ? (
+              <div className="hero-image-loading">
+                <div className="hero-spinner" />
+              </div>
+            ) : heroImageUrl ? (
+              <img
+                src={heroImageUrl}
+                alt={t.hero.slide1Title}
+                className="hero-img"
+              />
+            ) : (
+              <div className="hero-image-loading">
+                <span>Unable to load image</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

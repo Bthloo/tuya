@@ -18,7 +18,14 @@ export default function Footer() {
           </p>
 
           <p className="developer">
-            {t.footer.developer} <span>Bassel Alaa</span>
+            {t.footer.developer}{" "}
+            <a
+              href="https://wa.me/201111269525"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Bassel Alaa
+            </a>
           </p>
         </div>
       </div>
