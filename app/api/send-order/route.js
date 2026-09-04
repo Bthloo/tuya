@@ -1,8 +1,27 @@
 export async function POST(req) {
   const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+console.log("BOT TOKEN EXISTS:", !!BOT_TOKEN);
+console.log("BOT TOKEN LENGTH:", BOT_TOKEN?.length);
+console.log("CHAT ID EXISTS:", !!CHAT_ID);
+console.log("CHAT ID:", CHAT_ID);
+
+
+
 
   try {
+
+
+
+const test = await fetch(
+  `https://api.telegram.org/bot${BOT_TOKEN}/getMe`
+);
+
+const testData = await test.json();
+
+console.log("Telegram getMe:", testData);
+
+
     const formData = await req.formData();
 
     const fullName = formData.get("fullName");
