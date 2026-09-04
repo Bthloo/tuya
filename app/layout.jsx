@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import { LanguageProvider } from "../context/LanguageContext";
 import { CartProvider } from "../context/CartContext";
 import Header from "../components/Header";
@@ -8,19 +8,29 @@ import About from "../components/About";
 import Contact from "../components/Contact";
 import BackToTop from "../components/TopButton";
 export const metadata = {
-  title: "TUYA | HOME BAKES",
+  title: "TUYA | HOMEBAKES",
   description: "Chocolate, baklava, candy and cakes delivered fresh.",
 };
 
+
 const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
-  variable: "--font-main",
-});
+    subsets: ["latin"],
+    weight: ["200", "300", "400", "500", "600", "700", "800"],
+    variable: "--font-jakarta",
+    });
+const playfair = Playfair_Display({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+     variable: "--font-playfair",
+    });
+
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={plusJakarta.variable}>
+   <html
+     lang="en"
+     className={`${plusJakarta.variable} ${playfair.variable}`}
+   >
       <head>
         <link
           rel="stylesheet"
@@ -28,12 +38,12 @@ export default function RootLayout({ children }) {
         />
         
       </head>
-      <body suppressHydrationWarning>
+      <body className={plusJakarta.className} suppressHydrationWarning>
         <LanguageProvider>
           <CartProvider>
             <Header />
             <main style={{ minHeight: "60vh" }}>{children}</main>
-            <About/>
+{/*             <About/> */}
             <Contact/>
             <BackToTop />
              <Footer /> 

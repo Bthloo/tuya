@@ -129,13 +129,13 @@ export default function Header() {
             {t.nav.products}
           </Link>
 
-          <Link
-            href="#about"
-            className={activeSection === "about" ? styles.linkActive : ""}
-            onClick={(e) => handleNavClick(e, "about")}
-          >
-            {t.nav.about}
-          </Link>
+{/*           <Link */}
+{/*             href="#about" */}
+{/*             className={activeSection === "about" ? styles.linkActive : ""} */}
+{/*             onClick={(e) => handleNavClick(e, "about")} */}
+{/*           > */}
+{/*             {t.nav.about} */}
+{/*           </Link> */}
 
           <Link
             href="#contact"

@@ -12,7 +12,7 @@ export default function Contact() {
       icon: "fa-brands fa-facebook-f",
       label: "Facebook",
       value: "Tuya Home Bakes",
-      link: "https://facebook.com/",
+      link: "https://www.facebook.com/share/19MGL6zJAg/?mibextid=wwXIfr",
     },
     {
       type: "instagram",
@@ -33,7 +33,7 @@ export default function Contact() {
       icon: "fa-brands fa-telegram",
       label: "Telegram",
       value: "@tuyahomebakes",
-      link: "https://t.me/",
+      link: "https://t.me/905514756825",
     },
     {
       type: "location",

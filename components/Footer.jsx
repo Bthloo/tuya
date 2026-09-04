@@ -18,7 +18,7 @@ export default function Footer() {
           </p>
 
           <p className="developer">
-            {t.footer.developer}{" "}
+           {" "} {t.footer.developer}{" "}
             <a
               href="https://wa.me/201111269525"
               target="_blank"
