@@ -13,30 +13,50 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
+
+  function handleNavClick(e, sectionId) {
+    e.preventDefault();
+
+    setActiveSection(sectionId);
+    closeMenu();
+
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   useEffect(() => {
     const sections = ["home", "categories", "about", "contact"];
 
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100;
+      requestAnimationFrame(() => {
+        const scrollPosition = window.scrollY + 100;
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
+        for (const section of sections) {
+          const element = document.getElementById(section);
+
+          if (!element) continue;
+
           const top = element.offsetTop;
-          const height = element.offsetHeight;
+          const bottom = top + element.offsetHeight;
 
-          if (scrollPosition >= top && scrollPosition < top + height) {
+          if (scrollPosition >= top && scrollPosition < bottom) {
             setActiveSection(section);
-            break;
+            return;
           }
         }
-      }
-      if (window.scrollY < 50) {
-        setActiveSection("home");
-      }
+
+        if (window.scrollY < 100) {
+          setActiveSection("home");
+        }
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -96,28 +116,31 @@ export default function Header() {
           <Link
             href="#home"
             className={activeSection === "home" ? styles.linkActive : ""}
-            onClick={closeMenu}
+            onClick={(e) => handleNavClick(e, "home")}
           >
             {t.nav.home}
           </Link>
+
           <Link
             href="#categories"
             className={activeSection === "categories" ? styles.linkActive : ""}
-            onClick={closeMenu}
+            onClick={(e) => handleNavClick(e, "categories")}
           >
             {t.nav.products}
           </Link>
+
           <Link
             href="#about"
             className={activeSection === "about" ? styles.linkActive : ""}
-            onClick={closeMenu}
+            onClick={(e) => handleNavClick(e, "about")}
           >
             {t.nav.about}
           </Link>
+
           <Link
             href="#contact"
             className={activeSection === "contact" ? styles.linkActive : ""}
-            onClick={closeMenu}
+            onClick={(e) => handleNavClick(e, "contact")}
           >
             {t.nav.contact}
           </Link>

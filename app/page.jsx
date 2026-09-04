@@ -31,8 +31,22 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="container" style={{ padding: "60px 0" }}>
-        <p>Loading...</p>
+      <div className="container" style={{ paddingTop: 40, paddingBottom: 40 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+            gap: 18,
+          }}
+        >
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="skeleton-card">
+              <div className="skeleton-img" />
+              <div className="skeleton-line skeleton-line-short" />
+              <div className="skeleton-line skeleton-line-long" />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

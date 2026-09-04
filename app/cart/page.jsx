@@ -9,6 +9,8 @@ import styles from "./cart.module.css";
 const DELIVERY_FEE = 150;
 const FREE_DELIVERY_THRESHOLD = 500000000;
 
+
+
 const paymentInfo = {
   iban: "TR10 0001 5001 5800 7389 0374 24",
   accountName: "RADWA ELKHAMISY",
@@ -49,6 +51,9 @@ const paymentInfoText = {
 };
 
 export default function CartPage() {
+    const [sending, setSending] = useState(false);
+    const [orderError, setOrderError] = useState("");
+
   const { lang, t } = useLanguage();
   const { items, updateQty, removeFromCart, subtotal, clearCart } = useCart();
 
@@ -126,11 +131,48 @@ export default function CartPage() {
     }
   }
 
-  function handlePlaceOrder(e) {
+  async function handlePlaceOrder(e) {
     e.preventDefault();
+    setOrderError("");
+    setSending(true);
 
-    setOrderDone(true);
-    clearCart();
+    try {
+      const formData = new FormData();
+      formData.append("fullName", form.fullName);
+      formData.append("address", form.address);
+      formData.append("phone", form.phone);
+      formData.append("notes", form.notes || "");
+      formData.append("items", JSON.stringify(items));
+      formData.append("subtotal", subtotal);
+      formData.append("delivery", delivery);
+      formData.append("grandTotal", grandTotal);
+      if (paymentImage) {
+        formData.append("image", paymentImage);
+      }
+
+      const res = await fetch("/api/send-order", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        throw new Error(data.error || "Failed to send order");
+      }
+
+      setOrderDone(true);
+      clearCart();
+    } catch (err) {
+      console.error(err);
+      setOrderError(
+        lang === "tr"
+          ? "Sipariş gönderilemedi. Lütfen tekrar deneyin."
+          : "Couldn't send your order. Please try again."
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   if (orderDone) {
@@ -399,12 +441,19 @@ export default function CartPage() {
                   />
                 </div>
 
+                {orderError && (
+                  <p style={{ color: "#c0392b", fontSize: 14, marginTop: 8 }}>
+                    {orderError}
+                  </p>
+                )}
+
                 <button
                   type="submit"
                   className="btn btn-block"
                   style={{ marginTop: 10 }}
+                  disabled={sending}
                 >
-                  {t.cart.placeOrder}
+                  {sending ? "..." : t.cart.placeOrder}
                 </button>
               </form>
             )}

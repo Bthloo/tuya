@@ -48,7 +48,7 @@ const Hero = () => {
       : "Handmade in small batches, delivered fresh.";
 
   return (
-    <section className="hero">
+    <section id="home" className="hero">
       <div
         className="hero-bg-blur"
         style={{ backgroundImage: `url('${heroImageUrl}')` }}
