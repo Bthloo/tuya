@@ -9,7 +9,7 @@ import Contact from "../components/Contact";
 import BackToTop from "../components/TopButton";
 export const metadata = {
   title: "TUYA | HOMEBAKES",
-  description: "Chocolate, baklava, candy and cakes delivered fresh.",
+  description: "✨Cookie ve Brownie Dünyası ✨",
 };
 
 
