@@ -77,6 +77,15 @@ export default function CartPage() {
     };
   }, [paymentImagePreview]);
 
+useEffect(() => {
+  if (orderDone) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+}, [orderDone]);
+
   const vt = visaUploadText[lang] || visaUploadText["en"];
   const pt = paymentInfoText[lang] || paymentInfoText["en"];
 
