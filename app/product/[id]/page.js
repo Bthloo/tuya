@@ -18,7 +18,7 @@ export default function ProductPage() {
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
-
+const [imageError, setImageError] = useState(false);
   useEffect(() => {
     async function loadProduct() {
       try {
@@ -34,18 +34,53 @@ export default function ProductPage() {
     loadProduct();
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="container" style={{ padding: "60px 0" }}>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+ if (loading) {
+   return (
+     <div className="container" style={{ paddingTop: 40, paddingBottom: 60 }}>
+       <div className={styles.grid}>
+         <div>
+           <div className={`${styles.mainImage} ${styles.skeleton}`} />
+
+           <div className={styles.thumbs}>
+             {[1, 2, 3].map((item) => (
+               <div
+                 key={item}
+                 className={`${styles.thumbSkeleton} ${styles.skeleton}`}
+               />
+             ))}
+           </div>
+         </div>
+
+         <div className={styles.info}>
+           <div className={`${styles.skeleton} ${styles.titleSkeleton}`} />
+           <div className={`${styles.skeleton} ${styles.priceSkeleton}`} />
+
+           <div className={`${styles.skeleton} ${styles.textSkeleton}`} />
+           <div className={`${styles.skeleton} ${styles.textSkeleton}`} />
+           <div className={`${styles.skeleton} ${styles.shortTextSkeleton}`} />
+
+           <div className={`${styles.skeleton} ${styles.buttonSkeleton}`} />
+         </div>
+       </div>
+     </div>
+   );
+ }
 
   if (!product) {
     return (
-      <div className="container" style={{ padding: "60px 0" }}>
-        <p>Product not found.</p>
+      <div className="container" style={{ padding: "80px 0" }}>
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>
+            <i className="fa-solid fa-cookie-bite" />
+          </div>
+
+          <h1>{t.product.notFound || "Product not found"}</h1>
+
+          <p>
+            {t.product.notFoundDescription ||
+              "Sorry, this product is no longer available."}
+          </p>
+        </div>
       </div>
     );
   }
@@ -55,6 +90,9 @@ export default function ProductPage() {
     setAdded(true);
     setTimeout(() => setAdded(false), 1800);
   }
+
+const fallbackImage =
+  "https://placehold.co/800x800/F7F3EE/262220?text=No+Image";
 
   const imageUrls =
     product.images?.length > 0

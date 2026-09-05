@@ -196,9 +196,17 @@ export default function CartPage() {
       <h1 className="section-title">{t.cart.title}</h1>
 
       {items.length === 0 ? (
-        <div style={{ paddingTop: 40, paddingBottom: 40 }}>
-          <p style={{ marginBottom: 18 }}>{t.cart.empty}</p>
+        <div className={styles.emptyCart}>
+          <div className={styles.emptyCartIcon}>
+            <i className="fa-solid fa-cookie-bite" />
+          </div>
+
+          <h2>{t.cart.empty || "Your cart is empty"}</h2>
+
+          <p>{t.cart.empty || "Looks like you haven't added anything yet."}</p>
+
           <Link href="/" className="btn">
+            <i className="fa-solid fa-arrow-left" />
             {t.cart.continueShopping}
           </Link>
         </div>
