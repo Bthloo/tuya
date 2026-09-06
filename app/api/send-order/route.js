@@ -69,36 +69,35 @@ export async function POST(req) {
 
 
     try {
-      try {
-        const orderId = crypto.randomUUID();
+      const orderId = crypto.randomUUID();
 
-        const { error: orderError } = await supabase.from("orders").insert({
-          id: orderId,
-          customer_name: fullName,
-          address: address,
-          phone: phone,
-          notes: notes || null,
-          total: parseFloat(grandTotal),
-        });
+      const { error: orderError } = await supabase.from("orders").insert({
+        id: orderId,
+        customer_name: fullName,
+        address: address,
+        phone: phone,
+        notes: notes || null,
+        total: parseFloat(grandTotal),
+      });
 
-        if (orderError) throw orderError;
+      if (orderError) throw orderError;
 
-        const orderItemsPayload = items.map((item) => ({
-          order_id: orderId,
-          product_id: item.id,
-          product_name: item.name?.en || item.name?.tr || item.name,
-          price: item.price,
-          qty: item.qty,
-        }));
+      const orderItemsPayload = items.map((item) => ({
+        order_id: orderId,
+        product_id: item.id,
+        product_name: item.name?.en || item.name?.tr || item.name,
+        price: item.price,
+        qty: item.qty,
+      }));
 
-        const { error: itemsError } = await supabase
-          .from("order_items")
-          .insert(orderItemsPayload);
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItemsPayload);
 
-        if (itemsError) throw itemsError;
-      } catch (dbErr) {
-        console.error("Supabase save failed (non-blocking):", dbErr);
-      }
+      if (itemsError) throw itemsError;
+    } catch (dbErr) {
+      console.error("Supabase save failed (non-blocking):", dbErr);
+    }
 
     return Response.json({ success: true });
   } catch (err) {
