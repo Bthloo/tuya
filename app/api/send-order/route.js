@@ -68,37 +68,42 @@ export async function POST(req) {
     }
 
 
-    const { data: orderData, error: orderError } = await supabase
-      .from("orders")
-      .insert({
-        customer_name: fullName,
-        address: address,
-        phone: phone,
-        notes: notes || null,
-        total: parseFloat(grandTotal),
-      })
-      .select()
-      .single();
+    try {
+      const { data: orderData, error: orderError } = await supabase
+        .from("orders")
+        .insert({
+          customer_name: fullName,
+          address: address,
+          phone: phone,
+          notes: notes || null,
+          total: parseFloat(grandTotal),
+        })
+        .select()
+        .single();
 
-    if (orderError) throw orderError;
+      if (orderError) throw orderError;
 
-    const orderItemsPayload = items.map((item) => ({
-      order_id: orderData.id,
-      product_id: item.id,
-      product_name: item.name?.en || item.name?.tr || item.name,
-      price: item.price,
-      qty: item.qty,
-    }));
+      const orderItemsPayload = items.map((item) => ({
+        order_id: orderData.id,
+        product_id: item.id,
+        product_name: item.name?.en || item.name?.tr || item.name,
+        price: item.price,
+        qty: item.qty,
+      }));
 
-    const { error: itemsError } = await supabase
-      .from("order_items")
-      .insert(orderItemsPayload);
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItemsPayload);
 
-    if (itemsError) throw itemsError;
+      if (itemsError) throw itemsError;
+    } catch (dbErr) {
+
+      console.error("Supabase save failed (non-blocking):", dbErr);
+    }
 
     return Response.json({ success: true });
   } catch (err) {
-    console.error("Order error:", err);
+    console.error("Telegram send error:", err);
     return Response.json(
       { success: false, error: err.message },
       { status: 500 }
