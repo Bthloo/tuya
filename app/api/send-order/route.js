@@ -1,3 +1,5 @@
+import { supabase } from '../../../lib/supabase'
+
 export async function POST(req) {
   const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -44,16 +46,11 @@ export async function POST(req) {
 
       const res = await fetch(
         `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
-        {
-          method: "POST",
-          body: telegramForm,
-        }
+        { method: "POST", body: telegramForm }
       );
-
       const data = await res.json();
       if (!data.ok) throw new Error(data.description || "Telegram error");
     } else {
-
       const res = await fetch(
         `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
         {
@@ -66,14 +63,42 @@ export async function POST(req) {
           }),
         }
       );
-
       const data = await res.json();
       if (!data.ok) throw new Error(data.description || "Telegram error");
     }
 
+
+    const { data: orderData, error: orderError } = await supabase
+      .from("orders")
+      .insert({
+        customer_name: fullName,
+        address: address,
+        phone: phone,
+        notes: notes || null,
+        total: parseFloat(grandTotal),
+      })
+      .select()
+      .single();
+
+    if (orderError) throw orderError;
+
+    const orderItemsPayload = items.map((item) => ({
+      order_id: orderData.id,
+      product_id: item.id,
+      product_name: item.name?.en || item.name?.tr || item.name,
+      price: item.price,
+      qty: item.qty,
+    }));
+
+    const { error: itemsError } = await supabase
+      .from("order_items")
+      .insert(orderItemsPayload);
+
+    if (itemsError) throw itemsError;
+
     return Response.json({ success: true });
   } catch (err) {
-    console.error("Telegram send error:", err);
+    console.error("Order error:", err);
     return Response.json(
       { success: false, error: err.message },
       { status: 500 }
